@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "593776358179",
+    "project_id": "ascolove-67568",
+    "storage_bucket": "ascolove-67568.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:593776358179:android:9b346ed4a6eaa8dc749296",
+        "android_client_info": {
+          "package_name": "com.example.tinderscola_final"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "593776358179-1ilk4akrg30v1lnh26cnj1t2prtjl5qv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxfJpZ5zvBlGdBGAOPP092WNYfH6ZwDJ0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "593776358179-1ilk4akrg30v1lnh26cnj1t2prtjl5qv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
