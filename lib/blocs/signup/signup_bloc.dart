@@ -48,6 +48,8 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     Emitter<SignUpState> emit,
   ) async {
     final state = this.state as SignUpLoaded;
+    print('the user is: ');
+    print(event.user);
     emit(SignUpLoaded(user: event.user, tabController: state.tabController));
     if (event.isSignup) {
       await _databaseRepository.createUser(event.user);

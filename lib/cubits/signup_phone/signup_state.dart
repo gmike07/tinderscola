@@ -6,6 +6,8 @@ class SignupStatePhone extends Equatable {
   final String countryName;
   final String verificationCode;
   final FormzStatus status;
+  final bool enterPhone;
+  final String otp;
   final auth.User? user;
 
   const SignupStatePhone({
@@ -14,6 +16,8 @@ class SignupStatePhone extends Equatable {
     this.countryName = 'IL',
     this.status = FormzStatus.pure,
     this.verificationCode = '',
+    this.otp = '',
+    this.enterPhone = true,
     this.user,
   });
 
@@ -21,16 +25,26 @@ class SignupStatePhone extends Equatable {
     return const SignupStatePhone(
       verificationCode: '',
       phoneNumber: '',
-      countryCode: '+972',
+      countryCode: '972',
       countryName: 'IL',
+      otp: '',
       status: FormzStatus.pure,
+      enterPhone: true,
       user: null,
     );
   }
 
   @override
-  List<Object?> get props =>
-      [countryName, phoneNumber, countryCode, status, verificationCode, user];
+  List<Object?> get props => [
+        countryName,
+        phoneNumber,
+        countryCode,
+        status,
+        verificationCode,
+        user,
+        enterPhone,
+        otp,
+      ];
 
   SignupStatePhone copyWith({
     String? phoneNumber,
@@ -38,6 +52,8 @@ class SignupStatePhone extends Equatable {
     String? countryName,
     String? verificationCode,
     FormzStatus? status,
+    bool? enterPhone,
+    String? otp,
     auth.User? user,
   }) {
     return SignupStatePhone(
@@ -46,6 +62,8 @@ class SignupStatePhone extends Equatable {
         countryName: countryName ?? this.countryName,
         status: status ?? this.status,
         user: user ?? this.user,
-        verificationCode: verificationCode ?? this.verificationCode);
+        verificationCode: verificationCode ?? this.verificationCode,
+        enterPhone: enterPhone ?? this.enterPhone,
+        otp: otp ?? this.otp);
   }
 }

@@ -59,6 +59,7 @@ dependencies:
   youtube_player_flutter: ^8.1.0
   video_player: ^2.4.5
   country_pickers: ^2.0.0
+  pin_code_fields: ^7.4.0
 
   form_inputs:
     path: packages/form_inputs

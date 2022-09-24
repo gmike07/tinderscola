@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:firebase_auth_platform_interface/firebase_auth_platform_interface.dart';
 import 'base_auth_repository.dart';
 
 class AuthRepository extends BaseAuthRepository {
@@ -48,18 +49,37 @@ class AuthRepository extends BaseAuthRepository {
   }
 
   @override
-  Future<void> verifyPhone({required String phoneNumber}) async {
-    // await _firebaseAuth.verifyPhoneNumber(
-    //   phoneNumber: phoneNumber,
-    //   timeout: const Duration(seconds: 120),
-    //   verificationCompleted: (PhoneAuthCredential credential) async {
-    //     await _firebaseAuth.signInWithCredential(credential);
-    //   },
-    //   verificationFailed: (FirebaseAuthException e) {
-    //     throw Exception(e.code);
-    //   },
-    //   codeSent: (String verificationId, int? resendToken) {},
-    //   codeAutoRetrievalTimeout: (String verificationId) {},
-    // );
+  Future<void> verifyPhone(
+      {required String phoneNumber,
+      required Function(String, int?) codeSent,
+      required Function(String) errorHandler,
+      required Future<void> Function(PhoneAuthCredential)
+          verifiedSuccess}) async {
+    await _firebaseAuth.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      timeout: const Duration(seconds: 120),
+      verificationCompleted: verifiedSuccess,
+      verificationFailed: (e) => errorHandler(e.code),
+      codeSent: codeSent,
+      codeAutoRetrievalTimeout: (String verificationId) {},
+    );
+  }
+
+  @override
+  Future<auth.User?> verifyCode(
+      {required String verificationId,
+      required String smsCode,
+      required Function(String) errorHandler}) async {
+    try {
+      PhoneAuthCredential credential = PhoneAuthProvider.credential(
+          verificationId: verificationId, smsCode: smsCode);
+
+      // Sign the user in (or link) with the credential
+      var credential_ = await _firebaseAuth.signInWithCredential(credential);
+      return credential_.user;
+    } catch (e) {
+      errorHandler(e.toString());
+    }
+    return null;
   }
 }
