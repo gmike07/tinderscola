@@ -124,8 +124,6 @@ class EnterOTP extends StatelessWidget {
             if (BlocProvider.of<SignupCubitPhone>(context).state.status ==
                 FormzStatus.submissionSuccess) {
               // ignore: use_build_context_synchronously
-              print('the user id is: ');
-              print(context.read<SignupCubitPhone>().state.user!.uid);
               context.read<SignUpBloc>().add(
                     ContinueSignUp(
                       isSignup: true,
