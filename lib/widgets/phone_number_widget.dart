@@ -27,7 +27,7 @@ class PhoneNumberWidget extends StatelessWidget {
       priorityCountries.add(CountryPickerUtils.getCountryByIsoCode(s));
     }
     return Card(
-        child: ListTile(
+            child: ListTile(
       onTap: () {
         showDialog(
           context: context,
@@ -64,12 +64,13 @@ class PhoneNumberWidget extends StatelessWidget {
             const SizedBox(width: 8.0),
             Text("+${country.phoneCode}"),
             const SizedBox(width: 8.0),
-            CustomTextField(
+            Expanded(
+                child: CustomTextField(
               hint: '056797541',
               icon: Icons.phone,
               errorText: showError ? 'The phone number is invalid.' : null,
               onChanged: onPhoneNumberChange,
-            )
+            ))
           ],
         );
 }

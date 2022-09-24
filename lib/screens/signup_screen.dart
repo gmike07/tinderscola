@@ -67,7 +67,7 @@ class SignUpScreen extends StatelessWidget {
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
                       Start(state: state),
-                      Email(state: state),
+                      Phone(state: state),
                       BasicData(state: state),
                       Specifics(state: state),
                       Pictures(state: state),

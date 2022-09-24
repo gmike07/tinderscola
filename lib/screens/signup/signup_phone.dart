@@ -60,20 +60,20 @@ class EnterPhoneNumber extends StatelessWidget {
                   const CustomTextHeader(text: 'What\'s Your Phone Number?'),
                   const SizedBox(height: 7),
                   BlocBuilder<SignupCubitPhone, SignupStatePhone>(
-                    buildWhen: (previous, current) =>
-                        previous.phoneNumber != current.phoneNumber,
                     builder: (context, state) {
                       return PhoneNumberWidget(
-                          defaultCountry:
-                              context.read<SignupCubitPhone>().getCountryName(),
-                          onPhoneNumberChange: (val) => context
-                              .read<SignupCubitPhone>()
-                              .phoneNumberChanged(val),
-                          onPhoneCodeChange: (country) => context
-                              .read<SignupCubitPhone>()
-                              .countryCodeChanged(
-                                  country.isoCode, country.name),
-                          showError: state.status == FormzStatus.invalid);
+                        defaultCountry:
+                            context.read<SignupCubitPhone>().getCountryName(),
+                        onPhoneNumberChange: (val) => context
+                            .read<SignupCubitPhone>()
+                            .phoneNumberChanged(val),
+                        onPhoneCodeChange: (country) => context
+                            .read<SignupCubitPhone>()
+                            .countryCodeChanged(
+                                country.phoneCode, country.isoCode),
+                        showError: state.status == FormzStatus.invalid,
+                        priorityList: const ['IL', 'US'],
+                      );
                     },
                   ),
                   const SizedBox(height: 30),

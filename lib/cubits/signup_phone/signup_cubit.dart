@@ -17,6 +17,8 @@ class SignupCubitPhone extends Cubit<SignupStatePhone> {
         super(SignupStatePhone.initial());
 
   void phoneNumberChanged(String value) {
+    print(state);
+
     emit(state.copyWith(
         phoneNumber: value,
         status: value.length == '528478503'.length
@@ -25,6 +27,7 @@ class SignupCubitPhone extends Cubit<SignupStatePhone> {
   }
 
   void countryCodeChanged(String code, String name) {
+    print(state);
     emit(state.copyWith(countryCode: code, countryName: name));
   }
 

@@ -5,3 +5,4 @@ export 'sigup_location.dart';
 export 'signup_specifics.dart';
 export 'signup_basic_data.dart';
 export 'signup_pictures.dart';
+export 'signup_phone.dart';

@@ -10,7 +10,7 @@ class SignupStatePhone extends Equatable {
 
   const SignupStatePhone({
     this.phoneNumber = '',
-    this.countryCode = '+972',
+    this.countryCode = '972',
     this.countryName = 'IL',
     this.status = FormzStatus.pure,
     this.verificationCode = '',

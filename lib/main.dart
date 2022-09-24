@@ -52,6 +52,10 @@ class MyApp extends StatelessWidget {
                 create: (context) =>
                     LoginCubit(authRepository: context.read<AuthRepository>()),
               ),
+              BlocProvider<SignupCubitPhone>(
+                create: (context) => SignupCubitPhone(
+                    authRepository: context.read<AuthRepository>()),
+              ),
             ],
             child: MaterialApp(
                 localizationsDelegates: const [
