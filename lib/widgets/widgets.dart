@@ -17,3 +17,4 @@ export 'bottom_navigation.dart';
 export 'screen_wrapper.dart';
 export 'custom_text.dart';
 export 'herbew_textfield.dart';
+export 'phone_number_widget.dart';

@@ -18,5 +18,8 @@ abstract class BaseDatabaseRepository {
   Future<String> createChat(Chat chat);
   Stream<Chat> getChat(String id);
   Future<void> updateChat(Chat chat);
+  Future<void> sendMessage(Chat chat, Message message);
   Stream<Chat> getChatsForUsers(String userId1, String userId2);
+  Future<void> reportUser(String currentUser, String matchedUser);
+  Future<void> unmatchUsers(String currentUser, String matchedUser);
 }

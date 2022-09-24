@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
-
 import 'base_auth_repository.dart';
 
 class AuthRepository extends BaseAuthRepository {
@@ -21,7 +20,7 @@ class AuthRepository extends BaseAuthRepository {
 
       final user = credential.user;
       return user;
-    } catch (_) {}
+    } catch (e) {}
     return null;
   }
 
@@ -46,5 +45,21 @@ class AuthRepository extends BaseAuthRepository {
   @override
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
+  }
+
+  @override
+  Future<void> verifyPhone({required String phoneNumber}) async {
+    // await _firebaseAuth.verifyPhoneNumber(
+    //   phoneNumber: phoneNumber,
+    //   timeout: const Duration(seconds: 120),
+    //   verificationCompleted: (PhoneAuthCredential credential) async {
+    //     await _firebaseAuth.signInWithCredential(credential);
+    //   },
+    //   verificationFailed: (FirebaseAuthException e) {
+    //     throw Exception(e.code);
+    //   },
+    //   codeSent: (String verificationId, int? resendToken) {},
+    //   codeAutoRetrievalTimeout: (String verificationId) {},
+    // );
   }
 }

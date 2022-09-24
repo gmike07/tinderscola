@@ -14,7 +14,7 @@ class GenderWidget extends StatelessWidget {
       required this.addFriendOption})
       : super(key: key);
 
-  IconData getGenderIcon(BuildContext context, String gender) {
+  static IconData getGenderIcon(BuildContext context, String gender) {
     if (gender == 'male') {
       return Icons.male;
     }

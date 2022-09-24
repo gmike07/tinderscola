@@ -4,6 +4,7 @@ import 'package:antdesign_icons/antdesign_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tinderscola_final/repositories/database/database_repository.dart';
 import 'package:tinderscola_final/widgets/youtube_player.dart';
 import '/animations/fadeinanimation.dart';
 import '/models/user.dart';
@@ -12,6 +13,7 @@ import '/widgets/widgets.dart';
 // ignore: must_be_immutable
 class UserScreen extends StatelessWidget {
   static const String routeName = '/userscreen';
+  final String currentUserId;
   final User user;
   final bool showButtons;
   final VoidCallback onLeftSwipe;
@@ -23,7 +25,8 @@ class UserScreen extends StatelessWidget {
       required this.showButtons,
       required this.onLeftSwipe,
       required this.onRightSwipe,
-      required this.onLaterSwipe})
+      required this.onLaterSwipe,
+      required this.currentUserId})
       : super(key: key);
 
   static Route route(
@@ -31,10 +34,12 @@ class UserScreen extends StatelessWidget {
       required bool showButtons,
       required VoidCallback onLeftSwipe,
       required VoidCallback onRightSwipe,
-      required VoidCallback onLaterSwipe}) {
+      required VoidCallback onLaterSwipe,
+      required String currentUserId}) {
     return MaterialPageRoute(
       settings: const RouteSettings(name: routeName),
       builder: (context) => UserScreen(
+        currentUserId: currentUserId,
         user: user,
         showButtons: showButtons,
         onLaterSwipe: onLaterSwipe,
@@ -363,6 +368,9 @@ class UserScreen extends StatelessWidget {
   }
 
   Widget _buildShareWidget(BuildContext context) {
+    if (currentUserId == user.id) {
+      return Container();
+    }
     return GestureDetector(
       onTap: () {
         showDialog(
@@ -408,6 +416,9 @@ class UserScreen extends StatelessWidget {
   }
 
   Widget _buildReport(BuildContext context) {
+    if (currentUserId == user.id) {
+      return Container();
+    }
     return GestureDetector(
       onTap: () {
         showDialog(
@@ -419,23 +430,50 @@ class UserScreen extends StatelessWidget {
                   width: MediaQuery.of(context).size.width / 1.2,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Column(children: [
-                      Text(
-                        'Report',
-                        style: GoogleFonts.aBeeZee(
-                          fontSize: 23,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      CustomText(
-                        text:
-                            'We wont tell ${user.name}\n\n\n\n I am not going to program a report feature, fuck that!',
-                        style: GoogleFonts.aBeeZee(
-                          fontSize: 16,
-                          fontWeight: FontWeight.normal,
-                        ),
-                      )
-                    ]),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Report',
+                            style: GoogleFonts.aBeeZee(
+                              fontSize: 23,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 30),
+                          CustomText(
+                            text:
+                                'Are you sure that you want to report ${user.name}?\n We won\'t tell them.',
+                            style: GoogleFonts.aBeeZee(
+                              fontSize: 16,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                          const SizedBox(height: 30),
+                          Row(
+                            children: [
+                              Flexible(
+                                  child: CustomButton(
+                                text: 'NO',
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              )),
+                              const SizedBox(width: 20),
+                              Flexible(
+                                  child: CustomButton(
+                                text: 'YES',
+                                onPressed: () {
+                                  DatabaseRepository d = DatabaseRepository();
+                                  d.unmatchUsers(currentUserId, user.id);
+                                  d.reportUser(currentUserId, user.id);
+                                  Navigator.of(context).pop();
+                                  Navigator.of(context).pop();
+                                },
+                              ))
+                            ],
+                          )
+                        ]),
                   ),
                 ),
               );

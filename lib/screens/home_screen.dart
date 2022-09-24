@@ -163,6 +163,7 @@ class HomePageLoaded extends StatelessWidget {
                 Navigator.of(context)
                     .pushNamed(UserScreen.routeName, arguments: {
                   'user': state.users[0],
+                  'currentUserId': state.currentUserId,
                   'showButtons': true,
                   'onLeftSwipe': onLeftSwipe(context, state),
                   'onRightSwipe': onRightSwipe(context, state),

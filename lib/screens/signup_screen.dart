@@ -64,7 +64,7 @@ class SignUpScreen extends StatelessWidget {
               }
               if (state is SignUpLoaded) {
                 return TabBarView(
-                    //physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     children: [
                       Start(state: state),
                       Email(state: state),

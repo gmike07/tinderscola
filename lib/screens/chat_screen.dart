@@ -70,96 +70,111 @@ class ChatScreenLoaded extends StatefulWidget {
 
 class _ChatScreenLoadedState extends State<ChatScreenLoaded> {
   final ScrollController _scrollController = ScrollController();
+  bool refreshed = false;
   @override
   Widget build(BuildContext context) {
+    if (!refreshed) {
+      Future.delayed(Duration(milliseconds: 100), () => {refresh()});
+    } else {
+      refreshed = false;
+    }
     return Scaffold(
-      // resizeToAvoidBottomInset: false,
-      backgroundColor: Color(0xFFF4F4F4),
-      appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          actions: const [
-            Icon(
-              Icons.more_vert_outlined,
+        // resizeToAvoidBottomInset: false,
+        backgroundColor: Color(0xFFF4F4F4),
+        appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            actions: [
+              IconButton(
+                icon: const Icon(
+                  Icons.remove_circle_outline_sharp,
+                  color: Colors.black,
+                ),
+                onPressed: () {
+                  createPopUp(
+                      context, widget.state.user.id, widget.state.matchedUser);
+                },
+              )
+            ],
+            elevation: 0,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back_ios),
               color: Colors.black,
-            )
-          ],
-          elevation: 0,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios),
-            color: Colors.black,
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          title: GestureDetector(
-              onTap: () {
-                Navigator.of(context).pushNamed(UserScreen.routeName,
-                    arguments: {'user': widget.state.matchedUser});
+              onPressed: () {
+                Navigator.of(context).pop();
               },
-              child: SizedBox(
-                child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Expanded(
-                        child: Row(children: [
-                      CircleAvatar(
-                          radius: 27,
-                          backgroundImage: NetworkImage(
-                              widget.state.matchedUser.getProfilePicture())),
-                      const SizedBox(width: 10),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomText(
-                            text: widget.state.matchedUser.name,
-                            style: ChatColors.nameStyle,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                    ]))),
-              ))),
-      body: widget.state.chat.messages.isEmpty
-          ? Column(
-              children: [
-                Expanded(
-                    child: SingleChildScrollView(
-                        child: _FirstMeeting(
-                            me: widget.state.user,
-                            matchedUser: widget.state.matchedUser))),
-                Spacer(),
-                ChatContainer(state: widget.state, notifyParent: refresh)
-              ],
-            )
-          : Column(
-              children: [
-                Expanded(
-                    child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: widget.state.chat.messages.length,
-                  reverse: false,
-                  controller: _scrollController,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                        title: _Message(
-                            message: widget.state.chat.messages[index],
-                            state: widget.state,
-                            currentUserId: widget.state.user.id,
-                            index: index));
-                  },
-                )),
-                ChatContainer(state: widget.state, notifyParent: refresh)
-              ],
             ),
-    );
+            title: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pushNamed(UserScreen.routeName,
+                      arguments: {
+                        'user': widget.state.matchedUser,
+                        'currentUserId': widget.state.user.id
+                      });
+                },
+                child: SizedBox(
+                  child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Expanded(
+                          child: Row(children: [
+                        CircleAvatar(
+                            radius: 27,
+                            backgroundImage: NetworkImage(
+                                widget.state.matchedUser.getProfilePicture())),
+                        const SizedBox(width: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomText(
+                              text: widget.state.matchedUser.name,
+                              style: ChatColors.nameStyle,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      ]))),
+                ))),
+        body: widget.state.chat.messages.isEmpty
+            ? Column(
+                children: [
+                  Expanded(
+                      child: SingleChildScrollView(
+                          child: _FirstMeeting(
+                              me: widget.state.user,
+                              matchedUser: widget.state.matchedUser))),
+                  Spacer(),
+                  ChatContainer(state: widget.state, notifyParent: refresh)
+                ],
+              )
+            : Column(
+                children: [
+                  Expanded(
+                      child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: widget.state.chat.messages.length,
+                    reverse: false,
+                    controller: _scrollController,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                          title: _Message(
+                              message: widget.state.chat.messages[index],
+                              state: widget.state,
+                              currentUserId: widget.state.user.id,
+                              index: index));
+                    },
+                  )),
+                  ChatContainer(state: widget.state, notifyParent: refresh)
+                ],
+              ));
   }
 
   void refresh() {
     setState(() {
+      refreshed = true;
       if (widget.state.chat.messages.length > 1) {
         _scrollController.animateTo(
           _scrollController.position.maxScrollExtent,
           curve: Curves.easeOut,
-          duration: const Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 200),
         );
       }
     });
@@ -452,4 +467,65 @@ class CustomContainer extends StatelessWidget {
     }
     return Container(padding: const EdgeInsets.only(right: 70), child: child);
   }
+}
+
+void createPopUp(BuildContext context, String currentUserId, User user) {
+  showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height / 1.5,
+            width: MediaQuery.of(context).size.width / 1.2,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Unmatch',
+                      style: GoogleFonts.aBeeZee(
+                        fontSize: 23,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    CustomText(
+                      text:
+                          'Are you sure that you want to unmatch ${user.name}?\n We won\'t tell them.',
+                      style: GoogleFonts.aBeeZee(
+                        fontSize: 16,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    Row(
+                      children: [
+                        Flexible(
+                            child: CustomButton(
+                          text: 'NO',
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        )),
+                        const SizedBox(width: 20),
+                        Flexible(
+                            child: CustomButton(
+                          text: 'YES',
+                          onPressed: () {
+                            DatabaseRepository d = DatabaseRepository();
+                            d.unmatchUsers(currentUserId, user.id);
+                            Navigator.of(context)
+                                .popUntil((route) => route.isFirst);
+                            Navigator.of(context)
+                                .pushNamed(MainScreen.routeName);
+                          },
+                        ))
+                      ],
+                    )
+                  ]),
+            ),
+          ),
+        );
+      });
 }

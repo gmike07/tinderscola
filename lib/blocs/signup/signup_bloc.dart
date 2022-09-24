@@ -48,6 +48,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     Emitter<SignUpState> emit,
   ) async {
     final state = this.state as SignUpLoaded;
+    emit(SignUpLoaded(user: event.user, tabController: state.tabController));
     if (event.isSignup) {
       await _databaseRepository.createUser(event.user);
     }
@@ -56,7 +57,6 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     if (state.tabController.index != 5) {
       state.tabController.animateTo(state.tabController.index + 1);
     }
-    emit(SignUpLoaded(user: event.user, tabController: state.tabController));
   }
 
   void _onUpdateUser(

@@ -45,6 +45,24 @@ class _UserCardState extends State<UserCard> {
         images.add(s);
       }
     }
+    List<Widget> nameAndGenders = [
+      CustomText(
+        text: widget.user.name,
+        style: GoogleFonts.aBeeZee(
+            fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+      ),
+      const SizedBox(width: 5)
+    ];
+    for (String g in [widget.user.gender]) {
+      nameAndGenders.add(Icon(GenderWidget.getGenderIcon(context, g),
+          size: 20, color: Colors.white));
+      nameAndGenders.add(const SizedBox(width: 5));
+    }
+    if (widget.user.searchesForFriends) {
+      nameAndGenders.add(Icon(GenderWidget.getGenderIcon(context, 'friend'),
+          size: 20, color: Colors.white));
+      nameAndGenders.add(const SizedBox(width: 5));
+    }
     return Hero(
         tag: 'user_card',
         child: Padding(
@@ -104,18 +122,7 @@ class _UserCardState extends State<UserCard> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            CustomText(
-                              text: widget.user.name,
-                              style: GoogleFonts.aBeeZee(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            ),
-                            const SizedBox(width: 10),
-                          ],
-                        ),
+                        Row(children: nameAndGenders),
                         Row(
                           children: [
                             CustomText(
@@ -297,6 +304,7 @@ class _UserCardState extends State<UserCard> {
                 Navigator.of(context)
                     .pushNamed(UserScreen.routeName, arguments: {
                   'user': state.users[0],
+                  'currentUserId': state.currentUserId,
                   'showButtons': true,
                   'onLeftSwipe': onLeftSwipe(context, state),
                   'onRightSwipe': onRightSwipe(context, state),

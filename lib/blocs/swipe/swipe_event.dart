@@ -20,7 +20,6 @@ class OpenChatLoaded extends SwipeEvent {
 
 class UpdateHome extends SwipeEvent {
   final List<User>? users;
-
   const UpdateHome({required this.users});
 
   @override

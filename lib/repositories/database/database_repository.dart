@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 //import 'package:geolocator/geolocator.dart';
 // ignore: depend_on_referenced_packages
 import 'package:rxdart/rxdart.dart';
+import 'package:tinderscola_final/config/constants.dart';
 
 import '/models/models.dart';
 import '/repositories/repositories.dart';
@@ -25,6 +26,7 @@ class DatabaseRepository extends BaseDatabaseRepository {
     return _firebaseFirestore
         .collection('users')
         .where('gender', whereIn: _selectGender(usertr))
+        .limit(AppConstants.limitQuery)
         .snapshots()
         .map((snap) {
       return snap.docs.map((doc) => User.fromSnapshot(doc)).toList();
@@ -37,6 +39,7 @@ class DatabaseRepository extends BaseDatabaseRepository {
       return _firebaseFirestore
           .collection('users')
           .where('searchesForFriends', isEqualTo: true)
+          .limit(AppConstants.limitQuery)
           .snapshots()
           .map((snap) {
         return snap.docs.map((doc) => User.fromSnapshot(doc)).toList();
@@ -271,6 +274,13 @@ class DatabaseRepository extends BaseDatabaseRepository {
   }
 
   @override
+  Future<void> sendMessage(Chat chat, Message message) async {
+    await _firebaseFirestore.collection('chats').doc(chat.id).update({
+      'messages': FieldValue.arrayUnion([message.toMap()])
+    });
+  }
+
+  @override
   Stream<Chat> getChatsForUsers(String userId1, String userId2) {
     return Rx.combineLatest2(
       _firebaseFirestore
@@ -298,5 +308,26 @@ class DatabaseRepository extends BaseDatabaseRepository {
         return chats[0];
       },
     );
+  }
+
+  @override
+  Future<void> unmatchUsers(String currentUser, String matchedUser) async {
+    await _firebaseFirestore.collection('users').doc(currentUser).update({
+      'swipeLeft': FieldValue.arrayUnion([matchedUser]),
+      'swipeRight': FieldValue.arrayRemove([matchedUser]),
+      'matches': FieldValue.arrayRemove([matchedUser])
+    });
+    await _firebaseFirestore.collection('users').doc(matchedUser).update({
+      'swipeLeft': FieldValue.arrayUnion([currentUser]),
+      'swipeRight': FieldValue.arrayRemove([currentUser]),
+      'matches': FieldValue.arrayRemove([currentUser])
+    });
+  }
+
+  @override
+  Future<void> reportUser(String currentUser, String matchedUser) async {
+    await _firebaseFirestore
+        .collection('reports')
+        .add({'reportedUser': matchedUser, 'reporter': currentUser});
   }
 }

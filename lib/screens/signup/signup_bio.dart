@@ -25,7 +25,9 @@ class Bio extends StatelessWidget {
       currentStep: 5,
       state: state,
       onPressed: () {
-        context.read<SignUpBloc>().add(ContinueSignUp(user: state.user));
+        context.read<SignUpBloc>().add(ContinueSignUp(
+            user:
+                state.user.copyWith(optionalInterests: state.user.interests)));
         if (state.user.imageUrls.length < 2) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('please add at least 2 images')),

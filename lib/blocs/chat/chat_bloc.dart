@@ -72,19 +72,30 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     });
     on<SendMessage>((event, emit) async {
       ChatLoaded state = this.state as ChatLoaded;
-      List<model.Message> messages = state.chat.messages;
-      messages.add(model.Message(
-          senderId: state.chat.userId,
-          receiverId: state.chat.matchedUserId,
-          message: event.message,
-          dateTime: DateTime.now(),
-          timeString: DateFormat('jm').format(DateTime.now()),
-          isLiked: false,
-          isRead: false));
-      add(UpdateChat(
-          user: event.user,
-          chat: state.chat.copyWith(messages: messages),
-          matchedUser: state.matchedUser));
+      await _databaseRepository.sendMessage(
+          state.chat,
+          model.Message(
+              senderId: state.chat.userId,
+              receiverId: state.chat.matchedUserId,
+              message: event.message,
+              dateTime: DateTime.now(),
+              timeString: DateFormat('jm').format(DateTime.now()),
+              isLiked: false,
+              isRead: false));
+      // ChatLoaded state = this.state as ChatLoaded;
+      // List<model.Message> messages = state.chat.messages;
+      // messages.add(model.Message(
+      //     senderId: state.chat.userId,
+      //     receiverId: state.chat.matchedUserId,
+      //     message: event.message,
+      //     dateTime: DateTime.now(),
+      //     timeString: DateFormat('jm').format(DateTime.now()),
+      //     isLiked: false,
+      //     isRead: false));
+      // add(UpdateChat(
+      //     user: event.user,
+      //     chat: state.chat.copyWith(messages: messages),
+      //     matchedUser: state.matchedUser));
       // add(UpdateChat(
       //     chat: state.chat.copyWith(messages: messages),
       //     matchedUser: match.matchedUser));

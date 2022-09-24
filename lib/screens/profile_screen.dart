@@ -355,7 +355,10 @@ class ProfileScreenLoaded extends StatelessWidget {
               text: 'preview profile',
               onPressed: () {
                 Navigator.of(context).pushNamed(UserScreen.routeName,
-                    arguments: {'user': state.user});
+                    arguments: {
+                      'user': state.user,
+                      'currentUserId': state.user.id
+                    });
               }),
           const SizedBox(height: 20),
           CustomButton(

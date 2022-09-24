@@ -6,5 +6,6 @@ abstract class BaseAuthRepository {
     required String email,
     required String password,
   });
+  Future<void> verifyPhone({required String phoneNumber});
   Future<void> signOut();
 }

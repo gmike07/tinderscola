@@ -18,6 +18,7 @@ class AppRouter {
         Map<String, dynamic> args = settings.arguments as Map<String, dynamic>;
         return UserScreen.route(
           user: args['user'] as User,
+          currentUserId: args['currentUserId'] as String,
           showButtons: args['showButtons'] ?? false,
           onLaterSwipe: args['onLaterSwipe'] ?? () {},
           onRightSwipe: args['onRightSwipe'] ?? () {},
@@ -38,7 +39,7 @@ class AppRouter {
         return ChatScreen.route(
             user: args['user'] as User, match: args['match'] as Match);
       default:
-        return _errorRoute();
+        return MainScreen.route();
     }
   }
 

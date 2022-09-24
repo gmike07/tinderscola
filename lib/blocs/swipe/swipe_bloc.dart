@@ -17,12 +17,13 @@ class SwipeBloc extends Bloc<SwipeEvent, SwipeState> {
   StreamSubscription? _authSubscription;
   StreamSubscription? _databaseSubscription;
 
-  SwipeBloc({
-    required AuthBloc authBloc,
-    required DatabaseRepository databaseRepository,
-  })  : _authBloc = authBloc,
+  SwipeBloc(
+      {required AuthBloc authBloc,
+      required DatabaseRepository databaseRepository,
+      required String currentUserId})
+      : _authBloc = authBloc,
         _databaseRepository = databaseRepository,
-        super(SwipeLoading()) {
+        super(SwipeLoading(currentUserId: currentUserId)) {
     on<LoadUsers>(_onLoadUsers);
     on<UpdateHome>(_onUpdateHome);
     on<SwipeLeft>(_onSwipeLeft);
@@ -56,9 +57,10 @@ class SwipeBloc extends Bloc<SwipeEvent, SwipeState> {
     Emitter<SwipeState> emit,
   ) {
     if (event.users!.isNotEmpty) {
-      emit(SwipeLoaded(users: event.users!));
+      emit(
+          SwipeLoaded(users: event.users!, currentUserId: state.currentUserId));
     } else {
-      emit(SwipeError());
+      emit(SwipeError(currentUserId: state.currentUserId));
     }
   }
 
@@ -78,9 +80,9 @@ class SwipeBloc extends Bloc<SwipeEvent, SwipeState> {
       );
 
       if (users.isNotEmpty) {
-        emit(SwipeLoaded(users: users));
+        emit(SwipeLoaded(users: users, currentUserId: state.currentUserId));
       } else {
-        emit(SwipeError());
+        emit(SwipeError(currentUserId: state.currentUserId));
       }
     }
   }
@@ -103,7 +105,7 @@ class SwipeBloc extends Bloc<SwipeEvent, SwipeState> {
         userId,
         event.user.id,
       );
-      emit(SwipeMatched(user: event.user));
+      emit(SwipeMatched(user: event.user, currentUserId: state.currentUserId));
       Chat chat = Chat(
           id: '',
           userId: userId,
@@ -112,9 +114,9 @@ class SwipeBloc extends Bloc<SwipeEvent, SwipeState> {
       String id = await _databaseRepository.createChat(chat);
       await _databaseRepository.updateChat(chat.copyWith(id: id));
     } else if (users.isNotEmpty) {
-      emit(SwipeLoaded(users: users));
+      emit(SwipeLoaded(users: users, currentUserId: state.currentUserId));
     } else {
-      emit(SwipeError());
+      emit(SwipeError(currentUserId: state.currentUserId));
     }
   }
 
@@ -128,9 +130,9 @@ class SwipeBloc extends Bloc<SwipeEvent, SwipeState> {
       List<User> users = List.from(state.users)..remove(event.user);
 
       if (users.isNotEmpty) {
-        emit(SwipeLoaded(users: users));
+        emit(SwipeLoaded(users: users, currentUserId: state.currentUserId));
       } else {
-        emit(SwipeError());
+        emit(SwipeError(currentUserId: state.currentUserId));
       }
     }
   }
@@ -155,7 +157,7 @@ class SwipeBloc extends Bloc<SwipeEvent, SwipeState> {
     OpenChatLoaded event,
     Emitter<SwipeState> emit,
   ) async {
-    emit(ChatOpened(match: event.match));
+    emit(ChatOpened(match: event.match, currentUserId: state.currentUserId));
   }
 
   @override

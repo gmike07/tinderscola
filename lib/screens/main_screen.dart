@@ -17,11 +17,12 @@ class MainScreen extends StatefulWidget {
             ? LoginScreen()
             : MultiBlocProvider(providers: [
                 BlocProvider<SwipeBloc>(
-                  create: (context) => SwipeBloc(
-                    authBloc: context.read<AuthBloc>(),
-                    databaseRepository: context.read<DatabaseRepository>(),
-                  )..add(LoadUsers()),
-                ),
+                    create: (context) => SwipeBloc(
+                        authBloc: context.read<AuthBloc>(),
+                        databaseRepository: context.read<DatabaseRepository>(),
+                        currentUserId:
+                            context.read<AuthBloc>().state.authUser!.uid)
+                      ..add(LoadUsers())),
                 BlocProvider<ProfileBloc>(
                     create: (context) => ProfileBloc(
                           authBloc: BlocProvider.of<AuthBloc>(context),

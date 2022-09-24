@@ -1,4 +1,5 @@
 class AppConstants {
+  static const int limitQuery = 5;
   static const String appName = 'Tinderscola';
   static const String appVersion = '1.0.0';
   static const String pathToLogo = 'assets/images/ascola.png';
