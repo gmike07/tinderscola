@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
+// ignore: depend_on_referenced_packages
 import 'package:firebase_auth_platform_interface/firebase_auth_platform_interface.dart';
+import 'package:tinderscola_final/config/constants.dart';
 import 'base_auth_repository.dart';
 
 class AuthRepository extends BaseAuthRepository {
@@ -21,7 +23,9 @@ class AuthRepository extends BaseAuthRepository {
 
       final user = credential.user;
       return user;
-    } catch (e) {}
+    } catch (e) {
+      AppConstants.showToast(e.toString());
+    }
     return null;
   }
 
@@ -53,15 +57,18 @@ class AuthRepository extends BaseAuthRepository {
       {required String phoneNumber,
       required Function(String, int?) codeSent,
       required Function(String) errorHandler,
-      required Future<void> Function(PhoneAuthCredential)
-          verifiedSuccess}) async {
+      required Future<void> Function(PhoneAuthCredential) verifiedSuccess,
+      required int? resendToken}) async {
     await _firebaseAuth.verifyPhoneNumber(
+      forceResendingToken: resendToken,
       phoneNumber: phoneNumber,
       timeout: const Duration(seconds: 120),
       verificationCompleted: verifiedSuccess,
       verificationFailed: (e) => errorHandler(e.code),
       codeSent: codeSent,
-      codeAutoRetrievalTimeout: (String verificationId) {},
+      codeAutoRetrievalTimeout: (String verificationId) {
+        codeSent(verificationId, resendToken);
+      },
     );
   }
 

@@ -11,7 +11,7 @@ class HerbrewCustomTextFieldWrapper extends StatefulWidget {
       {Key? key,
       this.hint,
       this.controller,
-      this.keyboardType,
+      this.keyboardType = TextInputType.text,
       this.onChanged,
       this.decoration})
       : super(key: key);
@@ -34,6 +34,7 @@ class _HerbrewCustomTextFieldWrapperState
     extends State<HerbrewCustomTextFieldWrapper> {
   final ValueNotifier<TextDirection> _textDir =
       ValueNotifier(TextDirection.ltr);
+
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<TextDirection>(

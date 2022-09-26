@@ -25,12 +25,26 @@ class DatabaseRepository extends BaseDatabaseRepository {
   Stream<List<User>> getRomanticUsers(User usertr) {
     return _firebaseFirestore
         .collection('users')
-        .where('gender', whereIn: _selectGender(usertr))
+        .where('gender', arrayContainsAny: _selectGender(usertr))
         .limit(AppConstants.limitQuery)
         .snapshots()
         .map((snap) {
       return snap.docs.map((doc) => User.fromSnapshot(doc)).toList();
     });
+  }
+
+  @override
+  Future<bool> isAllowedNumber(String phoneNumber) async {
+    try {
+      var document = await _firebaseFirestore
+          .collection('allowed_users')
+          .doc(phoneNumber)
+          .get();
+      return document.exists;
+    } catch (e) {
+      AppConstants.showToast(e.toString());
+    }
+    return false;
   }
 
   @override

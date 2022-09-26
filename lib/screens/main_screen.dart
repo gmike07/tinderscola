@@ -12,9 +12,9 @@ class MainScreen extends StatefulWidget {
     return MaterialPageRoute(
       settings: const RouteSettings(name: routeName),
       builder: (context) {
-        return BlocProvider.of<AuthBloc>(context).state.status ==
-                AuthStatus.unauthenticated
-            ? LoginScreen()
+        return BlocProvider.of<AuthBloc>(context).state.status !=
+                AuthStatus.authenticated
+            ? const LoginScreenPhone()
             : MultiBlocProvider(providers: [
                 BlocProvider<SwipeBloc>(
                     create: (context) => SwipeBloc(

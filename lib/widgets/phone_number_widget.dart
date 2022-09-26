@@ -27,7 +27,7 @@ class PhoneNumberWidget extends StatelessWidget {
       priorityCountries.add(CountryPickerUtils.getCountryByIsoCode(s));
     }
     return Card(
-            child: ListTile(
+        child: ListTile(
       onTap: () {
         showDialog(
           context: context,
@@ -70,6 +70,7 @@ class PhoneNumberWidget extends StatelessWidget {
               icon: Icons.phone,
               errorText: showError ? 'The phone number is invalid.' : null,
               onChanged: onPhoneNumberChange,
+              keyboardType: TextInputType.number,
             ))
           ],
         );

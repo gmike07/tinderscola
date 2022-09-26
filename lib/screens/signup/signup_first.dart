@@ -4,7 +4,6 @@ import 'package:lottie/lottie.dart';
 import '/blocs/blocs.dart';
 import '/widgets/widgets.dart';
 import '/config/constants.dart';
-import '/screens/screens.dart';
 // ignore: depend_on_referenced_packages
 import 'package:provider/provider.dart';
 
@@ -51,7 +50,7 @@ class Start extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () {
-                  Navigator.of(context).popAndPushNamed(LoginScreen.routeName);
+                  AppConstants.routeToLogin(context);
                 },
                 child: RichText(
                     text: TextSpan(children: [

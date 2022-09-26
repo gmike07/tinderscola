@@ -22,4 +22,5 @@ abstract class BaseDatabaseRepository {
   Stream<Chat> getChatsForUsers(String userId1, String userId2);
   Future<void> reportUser(String currentUser, String matchedUser);
   Future<void> unmatchUsers(String currentUser, String matchedUser);
+  Future<bool> isAllowedNumber(String phoneNumber);
 }

@@ -53,7 +53,7 @@ class _UserCardState extends State<UserCard> {
       ),
       const SizedBox(width: 5)
     ];
-    for (String g in [widget.user.gender]) {
+    for (String g in widget.user.gender) {
       nameAndGenders.add(Icon(GenderWidget.getGenderIcon(context, g),
           size: 20, color: Colors.white));
       nameAndGenders.add(const SizedBox(width: 5));

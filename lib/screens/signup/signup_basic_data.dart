@@ -2,9 +2,9 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tinderscola_final/config/constants.dart';
 
 import '/screens/screens.dart';
-//import 'package:tiki/authentications_bloc/cubits/signup_cubit.dart';
 import '/widgets/widgets.dart';
 import '/blocs/blocs.dart';
 // ignore: depend_on_referenced_packages
@@ -79,12 +79,23 @@ class BasicData extends StatelessWidget {
                     const SizedBox(height: 7),
                     GenderWidget(
                         isSelected: (gender) {
-                          return user.gender == gender;
+                          return state.user.gender.contains(gender);
                         },
                         onPressed: (gender) {
                           return () {
+                            List<String> genders = state.user.gender.toList();
+                            if (genders.contains(gender)) {
+                              if (genders.length == 1) {
+                                AppConstants.showToast(
+                                    'please select at least one gender');
+                              } else {
+                                genders.remove(gender);
+                              }
+                            } else {
+                              genders.add(gender);
+                            }
                             context.read<SignUpBloc>().add(UpdateUser(
-                                user: user.copyWith(gender: gender)));
+                                user: state.user.copyWith(gender: genders)));
                           };
                         },
                         addFriendOption: false),

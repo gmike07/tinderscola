@@ -28,7 +28,20 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     on<ContinueSignUp>(_onContinueSignUp);
     on<UpdateUser>(_onUpdateUser);
     on<UpdateUserImages>(_onUpdateUserImages);
+    on<UpdateDirection>(_onUpdateDirection);
     //on<SetUserLocation>(_onSetUserLocation);
+  }
+
+  void _onUpdateDirection(
+    UpdateDirection event,
+    Emitter<SignUpState> emit,
+  ) async {
+    emit(
+      SignUpLoaded(
+          user: (state as SignUpLoaded).user,
+          tabController: (state as SignUpLoaded).tabController,
+          direction: event.direction),
+    );
   }
 
   void _onStartSignUp(
@@ -48,8 +61,6 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     Emitter<SignUpState> emit,
   ) async {
     final state = this.state as SignUpLoaded;
-    print('the user is: ');
-    print(event.user);
     emit(SignUpLoaded(user: event.user, tabController: state.tabController));
     if (event.isSignup) {
       await _databaseRepository.createUser(event.user);

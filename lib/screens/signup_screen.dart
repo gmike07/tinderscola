@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import '../config/constants.dart';
 import '/blocs/signup/signup_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:google_fonts/google_fonts.dart';
-//import 'package:tiki/authentications_bloc/cubits/signup_cubit.dart';
 import '/screens/signup/signup.dart';
 import '/repositories/repositories.dart';
 import '/blocs/blocs.dart';
@@ -63,16 +63,32 @@ class SignUpScreen extends StatelessWidget {
                 );
               }
               if (state is SignUpLoaded) {
-                return TabBarView(
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: [
-                      Start(state: state),
-                      Phone(state: state),
-                      BasicData(state: state),
-                      Specifics(state: state),
-                      Pictures(state: state),
-                      Bio(state: state),
-                    ]);
+                return Listener(
+                    onPointerMove: (details) {
+                      context
+                          .read<SignUpBloc>()
+                          .add(UpdateDirection(direction: details.delta.dx));
+                    },
+                    child: TabBarView(
+                        physics: state.tabController.index == 1
+                            ? (state.direction < 0
+                                ? const NeverScrollableScrollPhysics()
+                                : const AlwaysScrollableScrollPhysics())
+                            : ((state.tabController.index == 2 ||
+                                        state.tabController.index == 0) &&
+                                    state.direction > 0
+                                ? const NeverScrollableScrollPhysics()
+                                : const AlwaysScrollableScrollPhysics()),
+                        children: [
+                          Start(state: state),
+                          AppConstants.useOTP
+                              ? Phone(state: state)
+                              : Email(state: state),
+                          BasicData(state: state),
+                          Specifics(state: state),
+                          Pictures(state: state),
+                          Bio(state: state),
+                        ]));
               }
               return const Text('Something went wrong.');
             }));

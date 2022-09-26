@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tinderscola_final/config/constants.dart';
 import '/widgets/widgets.dart';
 import '/blocs/blocs.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -97,9 +98,7 @@ class ProfileScreenLoaded extends StatelessWidget {
       ImagePicker picker = ImagePicker();
       final XFile? image = await picker.pickImage(source: ImageSource.gallery);
       if (image == null) {
-        // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text("No image selected")));
+        AppConstants.showToast("No image selected");
       } else {
         // ignore: use_build_context_synchronously
         context.read<ProfileBloc>().add(UpdateUserImageProfile(
@@ -113,9 +112,7 @@ class ProfileScreenLoaded extends StatelessWidget {
       ImagePicker picker = ImagePicker();
       final XFile? image = await picker.pickImage(source: ImageSource.gallery);
       if (image == null) {
-        // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text("No image selected")));
+        AppConstants.showToast("No image selected");
       } else {
         // ignore: use_build_context_synchronously
         context
@@ -130,9 +127,7 @@ class ProfileScreenLoaded extends StatelessWidget {
       ImagePicker picker = ImagePicker();
       final XFile? image = await picker.pickImage(source: ImageSource.gallery);
       if (image == null) {
-        // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text("No image selected")));
+        AppConstants.showToast("No image selected");
       } else {
         // ignore: use_build_context_synchronously
         context
@@ -195,15 +190,26 @@ class ProfileScreenLoaded extends StatelessWidget {
               child: const CustomTextHeader(text: 'Gender:')),
           GenderWidget(
               isSelected: (gender) {
-                if (!state.editingFields.contains(genderString)) {
-                  return gender == state.user.gender;
-                }
-                return state.user.gender == gender;
+                return state.user.gender.contains(gender);
               },
               onPressed: (gender) {
                 return () {
+                  if (!state.editingFields.contains(genderString)) {
+                    return;
+                  }
+                  List<String> genders = state.user.gender.toList();
+                  if (genders.contains(gender)) {
+                    if (genders.length == 1) {
+                      AppConstants.showToast(
+                          'please select at least one gender');
+                    } else {
+                      genders.remove(gender);
+                    }
+                  } else {
+                    genders.add(gender);
+                  }
                   context.read<ProfileBloc>().add(UpdateUserProfile(
-                      user: state.user.copyWith(gender: gender)));
+                      user: state.user.copyWith(gender: genders)));
                 };
               },
               addFriendOption: false),

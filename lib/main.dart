@@ -11,10 +11,15 @@ import 'blocs/blocs.dart';
 import 'config/constants.dart';
 import 'config/theme.dart';
 import 'repositories/repositories.dart';
+// import '/models/models.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  // DatabaseRepository d = DatabaseRepository();
+  // for (User user in User.users) {
+  //   d.createUser(user);
+  // }
   runApp(const MyApp());
 }
 
@@ -56,8 +61,13 @@ class MyApp extends StatelessWidget {
                 create: (context) => SignupCubitPhone(
                     authRepository: context.read<AuthRepository>()),
               ),
+              BlocProvider<LoginCubitPhone>(
+                create: (context) => LoginCubitPhone(
+                    authRepository: context.read<AuthRepository>()),
+              ),
             ],
             child: MaterialApp(
+                scaffoldMessengerKey: AppConstants.snackbarKey,
                 localizationsDelegates: const [
                   GlobalCupertinoLocalizations.delegate,
                   GlobalMaterialLocalizations.delegate,

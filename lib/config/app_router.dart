@@ -28,6 +28,8 @@ class AppRouter {
         return SignUpScreen.route();
       case LoginScreen.routeName:
         return LoginScreen.route();
+      case LoginScreenPhone.routeName:
+        return LoginScreenPhone.route();
       case SplashScreen.routeName:
         return SplashScreen.route();
       case ProfileScreen.routeName:
@@ -43,10 +45,10 @@ class AppRouter {
     }
   }
 
-  static Route _errorRoute() {
-    return MaterialPageRoute(
-      builder: (_) => Scaffold(appBar: AppBar(title: const Text('error'))),
-      settings: const RouteSettings(name: '/error'),
-    );
-  }
+  // static Route _errorRoute() {
+  //   return MaterialPageRoute(
+  //     builder: (_) => Scaffold(appBar: AppBar(title: const Text('error'))),
+  //     settings: const RouteSettings(name: '/error'),
+  //   );
+  // }
 }

@@ -11,14 +11,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // ignore: depend_on_referenced_packages
 import 'package:firebase_auth_platform_interface/firebase_auth_platform_interface.dart';
 import '/models/models.dart';
-part 'signup_state.dart';
+part 'login_state.dart';
 
-class SignupCubitPhone extends Cubit<SignupStatePhone> {
+class LoginCubitPhone extends Cubit<LoginStatePhone> {
   final AuthRepository _authRepository;
 
-  SignupCubitPhone({required AuthRepository authRepository})
+  LoginCubitPhone({required AuthRepository authRepository})
       : _authRepository = authRepository,
-        super(SignupStatePhone.initial());
+        super(LoginStatePhone.initial());
 
   void phoneNumberChanged(String value) {
     emit(state.copyWith(
@@ -60,7 +60,9 @@ class SignupCubitPhone extends Cubit<SignupStatePhone> {
   }
 
   void Function(String) errorHandler(BuildContext context) {
-    return (String s) => {AppConstants.showToast(s)};
+    return (String s) {
+      AppConstants.showToast(s);
+    };
   }
 
   void storeVerificationCode(String verificationCode, int? resendToken) {
@@ -77,15 +79,19 @@ class SignupCubitPhone extends Cubit<SignupStatePhone> {
         emit(state.copyWith(
             status: FormzStatus.submissionSuccess, user: credential_.user));
         // ignore: use_build_context_synchronously
-        context.read<SignUpBloc>().add(
-              ContinueSignUp(
-                isSignup: true,
-                user: User.empty.copyWith(
-                  // ignore: use_build_context_synchronously
-                  id: credential_.user!.uid,
+        if (BlocProvider.of<LoginCubitPhone>(context).state.status ==
+            FormzStatus.submissionSuccess) {
+          // ignore: use_build_context_synchronously
+          context.read<SignUpBloc>().add(
+                ContinueSignUp(
+                  isSignup: true,
+                  user: User.empty.copyWith(
+                    // ignore: use_build_context_synchronously
+                    id: credential_.user!.uid,
+                  ),
                 ),
-              ),
-            );
+              );
+        }
       } catch (_) {
         emit(state.copyWith(status: FormzStatus.submissionFailure));
       }

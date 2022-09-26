@@ -3,6 +3,7 @@
 import 'package:antdesign_icons/antdesign_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tinderscola_final/config/constants.dart';
 import '/screens/screens.dart';
 import '/widgets/widgets.dart';
 // ignore: depend_on_referenced_packages
@@ -19,8 +20,8 @@ class LoginScreen extends StatelessWidget {
     return MaterialPageRoute(
       settings: const RouteSettings(name: routeName),
       builder: (context) {
-        return BlocProvider.of<AuthBloc>(context).state.status ==
-                AuthStatus.unauthenticated
+        return BlocProvider.of<AuthBloc>(context).state.status !=
+                AuthStatus.authenticated
             ? LoginScreen()
             : const MainScreen();
       },
@@ -39,12 +40,8 @@ class LoginScreen extends StatelessWidget {
         body: BlocListener<LoginCubit, LoginState>(
             listener: (context, state) {
               if (state.status.isSubmissionFailure) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content:
-                        Text(state.errorMessage ?? 'Authentication Failure'),
-                  ),
-                );
+                AppConstants.showToast(
+                    state.errorMessage ?? 'Authentication Failure');
               }
               if (state.status.isSubmissionSuccess) {
                 //Navigator.popAndPushNamed(context, HomeScreen.routeName);
@@ -159,12 +156,8 @@ class LoginButton extends StatelessWidget {
                               ? context
                                   .read<LoginCubit>()
                                   .logInWithCredentials()
-                              : ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                        'Check your email and password: ${state.status}'),
-                                  ),
-                                );
+                              : AppConstants.showToast(
+                                  'Check your email and password: ${state.status}');
                         },
                         style: ElevatedButton.styleFrom(
                           primary: Colors.transparent,

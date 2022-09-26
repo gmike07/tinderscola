@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 //import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tinderscola_final/config/constants.dart';
 import '/blocs/blocs.dart';
-//import 'package:tiki/authentications_bloc/cubits/signup_cubit.dart';
 import '/widgets/widgets.dart';
 // ignore: depend_on_referenced_packages
 import 'package:provider/provider.dart';
 import '/models/models.dart';
 import '/screens/screens.dart';
 
+// ignore: must_be_immutable
 class Bio extends StatelessWidget {
   final SignUpLoaded state;
+  String currentInterest;
 
-  const Bio({
-    Key? key,
-    required this.state,
-  }) : super(key: key);
+  Bio({Key? key, required this.state, this.currentInterest = ''})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,20 +28,25 @@ class Bio extends StatelessWidget {
         context.read<SignUpBloc>().add(ContinueSignUp(
             user:
                 state.user.copyWith(optionalInterests: state.user.interests)));
-        if (state.user.imageUrls.length < 2) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('please add at least 2 images')),
-          );
+        int counter = 0;
+        for (String? s in state.user.imageUrls) {
+          if (s != null) {
+            counter++;
+          }
+        }
+        if (counter < 2) {
+          AppConstants.showToast('please add at least 2 images');
         } else if (state.user.programName == '' ||
             state.user.programPlace == '') {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-                content: Text('please choose a program place and name')),
-          );
+          AppConstants.showToast('please choose a program place and name');
         } else if (state.user.name.length > 30) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('please choose a shorter name')),
-          );
+          AppConstants.showToast('please choose a shorter name');
+        } else if (state.user.name.isEmpty) {
+          AppConstants.showToast('please choose a longer name');
+        } else if (state.user.gender.isEmpty) {
+          AppConstants.showToast('please select at least one gender');
+        } else if (state.user.age < 10) {
+          AppConstants.showToast('please enter a bigger age');
         } else {
           Navigator.of(context).popAndPushNamed(MainScreen.routeName);
         }
@@ -78,7 +83,7 @@ class Bio extends StatelessWidget {
                       // controller: controller,
                     ),
                     const SizedBox(height: 40),
-                    const CustomTextHeader(text: 'Add custom Interests here'),
+                    const CustomTextHeader(text: 'Add custom interests here'),
                     const SizedBox(height: 10),
                     Row(
                       children: [
@@ -94,21 +99,26 @@ class Bio extends StatelessWidget {
                                 color: Colors.grey,
                               )),
                           onChanged: (value) {
-                            context.read<SignUpBloc>().add(UpdateUser(
-                                user: user.copyWith(currentInterest: value)));
+                            currentInterest = value;
                           },
                         )),
                         IconButton(
                             onPressed: () {
-                              List<String> optionalInterests =
-                                  user.optionalInterests!.toList();
-                              optionalInterests.add(user.currentInterest!);
-                              context.read<SignUpBloc>().add(UpdateUser(
-                                  user: user.copyWith(
-                                      optionalInterests: optionalInterests)));
-                              controller.clear();
+                              if (currentInterest.isNotEmpty) {
+                                List<String> optionalInterests =
+                                    state.user.optionalInterests!.toList();
+                                List<String> interests =
+                                    state.user.interests.toList();
+                                optionalInterests.add(currentInterest);
+                                interests.add(currentInterest);
+                                controller.clear();
+                                context.read<SignUpBloc>().add(UpdateUser(
+                                    user: state.user.copyWith(
+                                        interests: interests,
+                                        optionalInterests: optionalInterests)));
+                              }
                             },
-                            icon: const Icon(Icons.send))
+                            icon: const Icon(Icons.send)),
                       ],
                     ),
                     const SizedBox(height: 20),

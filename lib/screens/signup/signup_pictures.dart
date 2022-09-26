@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tinderscola_final/config/constants.dart';
 
 import '/screens/screens.dart';
 import '/widgets/widgets.dart';
@@ -24,8 +25,7 @@ class Pictures extends StatelessWidget {
       ImagePicker picker = ImagePicker();
       final XFile? image = await picker.pickImage(source: ImageSource.gallery);
       if (image == null) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text("No image selected")));
+        AppConstants.showToast("No image selected");
       } else {
         context
             .read<SignUpBloc>()

@@ -1,8 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 //import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tinderscola_final/config/constants.dart';
+import 'package:tinderscola_final/repositories/database/database_repository.dart';
 import '/blocs/signup/signup_bloc.dart';
-//import 'package:tiki/authentications_bloc/cubits/signup_cubit.dart';
 import '/widgets/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '/cubits/cubits.dart';
@@ -84,12 +87,17 @@ class EnterPhoneNumber extends StatelessWidget {
                       builder: (context, state) {
                     return CustomButton(
                       text: 'Verify phone number',
-                      onPressed: () {
+                      onPressed: () async {
                         if (state.status == FormzStatus.invalid) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text('Check your phone number')),
-                          );
+                          AppConstants.showToast('Check your phone number');
+                        }
+                        var allowedNumber = await DatabaseRepository()
+                            .isAllowedNumber(context
+                                .read<SignupCubitPhone>()
+                                .getPhoneNumber());
+                        if (!allowedNumber) {
+                          AppConstants.showToast(
+                              '${context.read<SignupCubitPhone>().getPhoneNumberString()} is not allowed to sign up');
                         } else {
                           context.read<SignupCubitPhone>().sendSMS(context);
                         }
@@ -119,11 +127,9 @@ class EnterOTP extends StatelessWidget {
         onPressed: () async {
           if (BlocProvider.of<SignupCubitPhone>(context).state.status ==
               FormzStatus.valid) {
-            await context.read<SignupCubitPhone>().validateSMS(context);
-            // ignore: use_build_context_synchronously
-            if (BlocProvider.of<SignupCubitPhone>(context).state.status ==
-                FormzStatus.submissionSuccess) {
-              // ignore: use_build_context_synchronously
+            var success =
+                await context.read<SignupCubitPhone>().validateSMS(context);
+            if (success) {
               context.read<SignUpBloc>().add(
                     ContinueSignUp(
                       isSignup: true,
@@ -135,10 +141,7 @@ class EnterOTP extends StatelessWidget {
                   );
             }
           } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                  content: Text('you entered a wrong verification code')),
-            );
+            AppConstants.showToast('you entered a wrong verification code');
           }
         },
         children: [
@@ -182,7 +185,11 @@ class EnterOTP extends StatelessWidget {
                         children: [
                           const CustomText(text: 'Didn\'t receive the code?'),
                           TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                context
+                                    .read<SignupCubitPhone>()
+                                    .sendSMS(context);
+                              },
                               child: const Text('Resend',
                                   style: TextStyle(color: Colors.red)))
                         ]),

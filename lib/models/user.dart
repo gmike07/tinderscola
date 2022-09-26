@@ -12,7 +12,7 @@ class User extends Equatable {
   final List<String> genderPreference;
   final String profilePicture;
   final String coverPicture;
-  final String gender;
+  final List<String> gender;
   final String programName;
   final String programPlace;
   final bool searchesForFriends;
@@ -85,7 +85,7 @@ class User extends Equatable {
         bio: snapshot.get('bio'),
         profilePicture: snapshot.get('profilePicture'),
         id: snapshot.id,
-        gender: snapshot.get('gender'),
+        gender: convertList(snapshot.get('gender')),
         coverPicture: snapshot.get('coverPicture'),
         matches: convertList(snapshot.get('matches')),
         swipeLeft: convertList(snapshot.get('swipeLeft')),
@@ -127,7 +127,7 @@ class User extends Equatable {
       String? bio,
       String? profilePicture,
       String? coverPicture,
-      String? gender,
+      List<String>? gender,
       String? programName,
       String? programPlace,
       bool? searchesForFriends,
@@ -169,6 +169,9 @@ class User extends Equatable {
         images.add(s);
       }
     }
+    if (images.isEmpty || images[0] == '') {
+      return 'https://serc.carleton.edu/download/images/54334/empty_user_icon_256.v2.png';
+    }
     return images[0];
   }
 
@@ -182,6 +185,9 @@ class User extends Equatable {
         images.add(s);
       }
     }
+    if (images.isEmpty || images[0] == '') {
+      return 'https://serc.carleton.edu/download/images/54334/empty_user_icon_256.v2.png';
+    }
     return images[0];
   }
 
@@ -194,7 +200,7 @@ class User extends Equatable {
       imageUrls: [null, null, null, null, null, null],
       profilePicture: '',
       coverPicture: '',
-      gender: '',
+      gender: [],
       programName: '',
       programPlace: '',
       searchesForFriends: false,
@@ -233,7 +239,7 @@ class User extends Equatable {
   //       programName: "Software Engineer",
   //       searchesForFriends: false,
   //       genderPreference: ['female', 'male', 'transgender'],
-  //       gender: 'female',
+  //       gender: ['female'],
   //       swipeLeft: [],
   //       swipeRight: [],
   //       matches: []),
@@ -255,7 +261,7 @@ class User extends Equatable {
   //       programName: "Medical Doctor",
   //       searchesForFriends: false,
   //       genderPreference: [],
-  //       gender: 'female',
+  //       gender: ['female'],
   //       swipeLeft: [],
   //       swipeRight: [],
   //       matches: []),
@@ -277,7 +283,7 @@ class User extends Equatable {
   //       programName: "Data Scientist",
   //       searchesForFriends: false,
   //       genderPreference: ['female', 'male', 'transgender'],
-  //       gender: 'male',
+  //       gender: ['male'],
   //       swipeLeft: [],
   //       swipeRight: [],
   //       matches: []),
@@ -300,7 +306,7 @@ class User extends Equatable {
   //       programName: "Software Engineer",
   //       searchesForFriends: false,
   //       genderPreference: ['female', 'male', 'transgender'],
-  //       gender: 'female',
+  //       gender: ['female'],
   //       swipeLeft: [],
   //       swipeRight: [],
   //       matches: []),
@@ -323,7 +329,7 @@ class User extends Equatable {
   //       programName: "Model",
   //       searchesForFriends: false,
   //       genderPreference: ['female', 'male', 'transgender'],
-  //       gender: 'female',
+  //       gender: ['female'],
   //       swipeLeft: [],
   //       swipeRight: [],
   //       matches: []),
@@ -346,7 +352,7 @@ class User extends Equatable {
   //       programName: "Photographer",
   //       searchesForFriends: false,
   //       genderPreference: ['female', 'male', 'transgender'],
-  //       gender: 'female',
+  //       gender: ['female'],
   //       swipeLeft: [],
   //       swipeRight: [],
   //       matches: []),
@@ -369,7 +375,7 @@ class User extends Equatable {
   //       programName: "Photographer",
   //       searchesForFriends: false,
   //       genderPreference: ['female', 'male', 'transgender'],
-  //       gender: 'female',
+  //       gender: ['female'],
   //       swipeLeft: [],
   //       swipeRight: [],
   //       matches: []),
@@ -392,7 +398,7 @@ class User extends Equatable {
   //       programName: "Photographer",
   //       searchesForFriends: false,
   //       genderPreference: ['female', 'male', 'transgender'],
-  //       gender: 'female',
+  //       gender: ['female'],
   //       swipeLeft: [],
   //       swipeRight: [],
   //       matches: []),
@@ -415,7 +421,7 @@ class User extends Equatable {
   //       programName: "Photographer",
   //       searchesForFriends: false,
   //       genderPreference: ['female', 'male', 'transgender'],
-  //       gender: 'female',
+  //       gender: ['female'],
   //       swipeLeft: [],
   //       swipeRight: [],
   //       matches: []),
@@ -438,7 +444,7 @@ class User extends Equatable {
   //       programName: "Photographer",
   //       searchesForFriends: false,
   //       genderPreference: ['female', 'male', 'transgender'],
-  //       gender: 'female',
+  //       gender: ['female'],
   //       swipeLeft: [],
   //       swipeRight: [],
   //       matches: []),

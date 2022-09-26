@@ -2,10 +2,10 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tinderscola_final/config/constants.dart';
 
 import '/blocs/signup/signup_bloc.dart';
 import '/screens/screens.dart';
-//import 'package:tiki/authentications_bloc/cubits/signup_cubit.dart';
 import '/widgets/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '/cubits/signup/signup_cubit.dart';
@@ -31,19 +31,21 @@ class Email extends StatelessWidget {
             FormzStatus.valid) {
           await context.read<SignupCubit>().signUpWithCredentials();
           // ignore: use_build_context_synchronously
-          context.read<SignUpBloc>().add(
-                ContinueSignUp(
-                  isSignup: true,
-                  user: User.empty.copyWith(
-                    // ignore: use_build_context_synchronously
-                    id: context.read<SignupCubit>().state.user!.uid,
+          if (BlocProvider.of<SignupCubit>(context).state.status ==
+              FormzStatus.submissionSuccess) {
+            // ignore: use_build_context_synchronously
+            context.read<SignUpBloc>().add(
+                  ContinueSignUp(
+                    isSignup: true,
+                    user: User.empty.copyWith(
+                      // ignore: use_build_context_synchronously
+                      id: context.read<SignupCubit>().state.user!.uid,
+                    ),
                   ),
-                ),
-              );
+                );
+          }
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Check your email and password')),
-          );
+          AppConstants.showToast('Check your email and password');
         }
       },
       children: [

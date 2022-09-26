@@ -42,6 +42,15 @@ class UpdateUser extends SignUpEvent {
   List<Object?> get props => [user];
 }
 
+class UpdateDirection extends SignUpEvent {
+  final double direction;
+
+  const UpdateDirection({required this.direction});
+
+  @override
+  List<Object?> get props => [direction];
+}
+
 class SetUserLocation extends SignUpEvent {
   // final Location? location;
   // final GoogleMapController? controller;

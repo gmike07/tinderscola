@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 //import 'package:provider/provider.dart';
 
 import 'package:step_progress_indicator/step_progress_indicator.dart';
-//import 'package:tiki/authentications_bloc/cubits/signup_cubit.dart';
 import '/widgets/widgets.dart';
 
 class Location extends StatelessWidget {

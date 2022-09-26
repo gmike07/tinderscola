@@ -1,6 +1,6 @@
-part of 'signup_cubit.dart';
+part of 'login_cubit.dart';
 
-class SignupStatePhone extends Equatable {
+class LoginStatePhone extends Equatable {
   final String phoneNumber;
   final String countryCode;
   final String countryName;
@@ -11,7 +11,7 @@ class SignupStatePhone extends Equatable {
   final auth.User? user;
   final int? resendToken;
 
-  const SignupStatePhone({
+  const LoginStatePhone({
     this.phoneNumber = '',
     this.countryCode = '972',
     this.countryName = 'IL',
@@ -23,8 +23,8 @@ class SignupStatePhone extends Equatable {
     this.resendToken,
   });
 
-  factory SignupStatePhone.initial() {
-    return const SignupStatePhone(
+  factory LoginStatePhone.initial() {
+    return const LoginStatePhone(
         verificationCode: '',
         phoneNumber: '',
         countryCode: '972',
@@ -49,7 +49,7 @@ class SignupStatePhone extends Equatable {
         resendToken
       ];
 
-  SignupStatePhone copyWith(
+  LoginStatePhone copyWith(
       {String? phoneNumber,
       String? countryCode,
       String? countryName,
@@ -59,7 +59,7 @@ class SignupStatePhone extends Equatable {
       String? otp,
       auth.User? user,
       int? resendToken}) {
-    return SignupStatePhone(
+    return LoginStatePhone(
         phoneNumber: phoneNumber ?? this.phoneNumber,
         countryCode: countryCode ?? this.countryCode,
         countryName: countryName ?? this.countryName,
@@ -68,6 +68,6 @@ class SignupStatePhone extends Equatable {
         verificationCode: verificationCode ?? this.verificationCode,
         enterPhone: enterPhone ?? this.enterPhone,
         otp: otp ?? this.otp,
-        resendToken: resendToken ?? this.resendToken);
+        resendToken: resendToken ?? resendToken);
   }
 }
